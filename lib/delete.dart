@@ -94,7 +94,9 @@ class _DeleteTestState extends State<DeleteTest> {
       key: FieldValue.delete(),
     });
     setState(() {
-      data = data?.remove(key);
+  data?.remove(key);
+});
+
     });
   },
 ),
