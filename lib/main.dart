@@ -8,7 +8,7 @@ import 'AuthPage.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(AuthenticationPage());
+  runApp(fill_test());
 }
 
 class MyApp extends StatelessWidget {
