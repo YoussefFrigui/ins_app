@@ -7,7 +7,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home'),
+        title: const Text('Home'),
       ),
       body: Center(
         child: ElevatedButton(
@@ -17,7 +17,7 @@ class HomePage extends StatelessWidget {
               MaterialPageRoute(builder: (context) => CreateData('')),
             );
           },
-          child: Text('Go to Existing Data'),
+          child: const Text('Go to Existing Data'),
         ),
       ),
     );

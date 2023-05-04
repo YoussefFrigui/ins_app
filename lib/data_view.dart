@@ -5,7 +5,7 @@ class DataScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: FirebaseFirestore.instance.collection('TAB1').get(),
+      future: FirebaseFirestore.instance.collection('TAB3').get(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
           return Center(child: Text('Something went wrong'));
@@ -17,7 +17,7 @@ class DataScreen extends StatelessWidget {
 
         final data = snapshot.data!.docs.map((DocumentSnapshot document) {
           Map<String, dynamic> data = document.data() as Map<String, dynamic>;
-          return {'Moyenne': data['Moyenne'], 'Annee': data['Annee'], 'Zone': data['Zone']};
+          return data;
         }).toList();
 
         return DataView(data: data);
@@ -53,7 +53,7 @@ class DataView extends StatelessWidget {
                   itemBuilder: (BuildContext context, int index) {
                     final item = data[index];
                     return ListTile(
-                      title: Text("Moyenne: ${item['Moyenne']}, Annee: ${item['Annee']}, Zone: ${item['Zone']}"),
+                      title: Text(item.toString()),
                     );
                   },
                 ),

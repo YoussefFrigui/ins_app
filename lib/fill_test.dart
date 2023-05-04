@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class NameForm extends StatefulWidget {
-  final FirebaseFirestore firestore;
+  final CollectionReference<Map<String, dynamic>> firestore;
 
   NameForm(this.firestore);
 
@@ -49,11 +48,11 @@ class _NameFormState extends State<NameForm> {
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     // Set the document ID to a random value
-                    String docId = widget.firestore.collection('names').doc().id;
+                    String docId = widget.firestore.doc().id;
 
                     // Create a reference to the document using the random ID
-                    DocumentReference docRef =
-                        widget.firestore.collection('names').doc(docId);
+                    DocumentReference<Map<String, dynamic>> docRef =
+                        widget.firestore.doc(docId);
 
                     // Set the document data using the form value
                     await docRef.set({

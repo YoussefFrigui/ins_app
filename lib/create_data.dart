@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:ins_app/fill_test.dart';
 
 class CreateData extends StatefulWidget {
   final String cin;
@@ -25,8 +26,7 @@ class _CreateDataState extends State<CreateData> {
       return null;
     }
   }
-
-  void createCollection() async {
+void createCollection() async {
   if (_formKey.currentState!.validate()) {
     final cin = _cinController.text.trim();
     final existingCollection = await firestore.collection(cin).get();
@@ -36,7 +36,7 @@ class _CreateDataState extends State<CreateData> {
         SnackBar(content: Text('Collection with CIN $cin already exists!')),
       );
     } else {
-      await firestore.collection(cin).add({'created_at': FieldValue.serverTimestamp()});
+      await firestore.collection(cin).doc().set({});
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Collection $cin created successfully!')),

@@ -1,5 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:ins_app/AuthPage.dart';
+import 'package:ins_app/data_view.dart';
 import 'homepage.dart';
+import 'fill_test.dart';
+import 'create_data.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
@@ -13,10 +18,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'My App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
       initialRoute: '/',
       routes: {
-        '/': (context) => HomePage(),
-      }
+        '/': (context) => AuthenticationPage(),
+        '/create': (context) => CreateData(''),
+
+      },
     );
   }
 }
