@@ -1,9 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ins_app/homepage.dart';
 import 'fill_test.dart';
 import 'package:ins_app/Signup.dart';
-import 'data_view.dart';
+
 
 class AuthenticationPage extends StatefulWidget {
   @override
@@ -86,7 +87,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => fill_test(),
+          builder: (context) => HomePage()
         ),
       );
     } on FirebaseAuthException catch (e) {
