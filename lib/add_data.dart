@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:ins_app/modify_data.dart';
 
 class AddData extends StatefulWidget {
   final String collectionName;
@@ -39,6 +40,10 @@ class _AddDataState extends State<AddData> {
       SnackBar(content: Text('Data added successfully!')),
     );
   }
+  Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ModifyData()),
+        );
 }
 
   @override
