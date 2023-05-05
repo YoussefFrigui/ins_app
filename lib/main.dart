@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: CreateData(''),
+      home: AddData(collectionName: '12345678'),
     );
   }
 }
