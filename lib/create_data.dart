@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:ins_app/fill_test.dart';
+import 'add_data.dart';
 
 class CreateData extends StatefulWidget {
   final String cin;
@@ -26,25 +26,34 @@ class _CreateDataState extends State<CreateData> {
       return null;
     }
   }
-void createCollection() async {
-  if (_formKey.currentState!.validate()) {
-    final cin = _cinController.text.trim();
-    final existingCollection = await firestore.collection(cin).get();
 
-    if (existingCollection.docs.isNotEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Collection with CIN $cin already exists!')),
-      );
-    } else {
-      await firestore.collection(cin).doc().set({});
+  void createCollection() async {
+    if (_formKey.currentState!.validate()) {
+      final cin = _cinController.text.trim();
+      final existingCollection = await firestore.collection(cin).get();
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Collection $cin created successfully!')),
-      );
+      if (existingCollection.docs.isNotEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Collection with CIN $cin already exists!')),
+        );
+      } else {
+        await firestore.collection(cin).doc('General info').set({});
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Collection $cin created successfully!')),
+        );
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => AddData(
+              collectionName: cin,
+            ),
+          ),
+        );
+      }
     }
   }
-}
-
 
   @override
   void initState() {

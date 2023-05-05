@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:ins_app/AuthPage.dart';
+import 'package:ins_app/add_data.dart';
 import 'package:ins_app/data_view.dart';
 import 'homepage.dart';
-import 'fill_test.dart';
+
 import 'create_data.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => AuthenticationPage(),
+        '/': (context) => CreateData(''),
         '/create': (context) => CreateData(''),
 
       },
