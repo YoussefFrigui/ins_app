@@ -12,7 +12,7 @@ class AddData extends StatefulWidget {
 
 class _AddDataState extends State<AddData> {
   final _formKey = GlobalKey<FormState>();
- var _selectedNombre_p = '1-2 personnes';
+  String _selectedNombre_p = '1-2 personnes';
   String _selectedProfession = 'cadres et professions libérales supérieures';
   String _selectedType = 'National';
   String _selectedZone = 'Grand Tunis';
