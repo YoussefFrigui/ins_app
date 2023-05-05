@@ -45,7 +45,7 @@ class _AddDataState extends State<AddData> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Data'),
+        title: Text('General info'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -149,7 +149,7 @@ border: OutlineInputBorder(),
 SizedBox(height: 16.0),
 ElevatedButton(
 onPressed: addData,
-child: Text('Add Data'),
+child: Text('Add'),
 ),
 ],
 ),
