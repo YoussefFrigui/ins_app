@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:ins_app/AuthPage.dart';
 import 'package:ins_app/add_data.dart';
 import 'package:ins_app/data_view.dart';
+import 'package:ins_app/existing_data.dart';
+import 'package:ins_app/modify_data.dart';
 import 'homepage.dart';
 import 'create_data.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -21,7 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: AddData(collectionName: '12345678'),
+      home: ExistingData(),
     );
   }
 }

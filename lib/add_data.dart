@@ -13,38 +13,84 @@ class AddData extends StatefulWidget {
 
 class _AddDataState extends State<AddData> {
   final _formKey = GlobalKey<FormState>();
+  String _selectedSalaire = 'Moins que 500 DT';
   String _selectedNombre_p = '1-2 personnes';
   String _selectedProfession = 'cadres et professions libérales supérieures';
   String _selectedType = 'National';
   String _selectedZone = 'Grand Tunis';
-  final nombre_p=['1-2 personnes','3-4 personnes','5-6 personnes','7-8 personnes','9+ personnes'];
-  final professions = ['cadres et professions libérales supérieures',	'cadres et professions libérales moyens',	'autres employés',	'patrons des petits métiers dans l''industrie',	'artisans et indépendants des petits métiers','	ouvriers non agricoles'	,'exploitants agricoles'	,'Ouvriers agricoles'	,'Chômeurs'	,'Retraités'	,'Autres inactifs'];
+  final nombre_p = [
+    '1-2 personnes',
+    '3-4 personnes',
+    '5-6 personnes',
+    '7-8 personnes',
+    '9+ personnes'
+  ];
+  final professions = [
+    'cadres et professions libérales supérieures',
+    'cadres et professions libérales moyens',
+    'autres employés',
+    'patrons des petits métiers dans l' 'industrie',
+    'artisans et indépendants des petits métiers',
+    '	ouvriers non agricoles',
+    'exploitants agricoles',
+    'Ouvriers agricoles',
+    'Chômeurs',
+    'Retraités',
+    'Autres inactifs'
+  ];
   final types = ['National', 'Communal', 'non Communal'];
-  final zones = ['Grand Tunis',	'Nord Est',	'Nord ouest',	'Centre Est',	'Centre Ouest',	'Sud Est',	'Sud Ouest'	];
+  final zones = [
+    'Grand Tunis',
+    'Nord Est',
+    'Nord ouest',
+    'Centre Est',
+    'Centre Ouest',
+    'Sud Est',
+    'Sud Ouest'
+  ];
+  final salaire = [
+    'Moins que 500 DT',
+    'De 500 à 750 DT',
+    'De 750 à 1000 DT',
+    'De 1000 à 1500 DT',
+    'De 1500 à 2000 DT',
+    'De 2000 à 3000 DT',
+    'De 3000 à 4500 DT',
+    'Plus que 4500 DT'
+  ];
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   void addData() async {
-  if (_formKey.currentState!.validate()) {
-    final docSnapshot = await firestore.collection(widget.collectionName).doc('General info').get();
-    final docID = docSnapshot.id;
+    if (_formKey.currentState!.validate()) {
+      final docSnapshot = await firestore
+          .collection(widget.collectionName)
+          .doc('General info')
+          .get();
+      final docID = docSnapshot.id;
 
-    await firestore.collection(widget.collectionName).doc(docID).set({
-      'nombre_p': _selectedNombre_p,
-      'profession': _selectedProfession,
-      'type': _selectedType,
-      'zone': _selectedZone,
-    });
+      await firestore.collection(widget.collectionName).doc(docID).set({
+        'nombre_p': _selectedNombre_p,
+        'profession': _selectedProfession,
+        'type': _selectedType,
+        'zone': _selectedZone,
+        'salaire': _selectedSalaire,
+      });
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Data added successfully!')),
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Data added successfully!')),
+      );
+    }
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ModifyData(
+          cin: widget.collectionName,
+          docId: 'Depense',
+        ),
+      ),
     );
   }
-  Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => ModifyData()),
-        );
-}
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +120,7 @@ class _AddDataState extends State<AddData> {
                   );
                 }).toList(),
                 decoration: InputDecoration(
-                  labelText: 'Profession',
+                  labelText: 'Nombre de personnes',
                   contentPadding: EdgeInsets.symmetric(
                     vertical: 8.0,
                     horizontal: 16.0,
@@ -143,23 +189,45 @@ class _AddDataState extends State<AddData> {
                   );
                 }).toList(),
                 decoration: InputDecoration(
-                 labelText: 'Zone',
-contentPadding: EdgeInsets.symmetric(
-vertical: 8.0,
-horizontal: 16.0,
-),
-border: OutlineInputBorder(),
-),
-),
-SizedBox(height: 16.0),
-ElevatedButton(
-onPressed: addData,
-child: Text('Add'),
-),
-],
-),
-),
-),
-);
-}
+                  labelText: 'Zone',
+                  contentPadding: EdgeInsets.symmetric(
+                    vertical: 8.0,
+                    horizontal: 16.0,
+                  ),
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(height: 16.0),
+              DropdownButtonFormField(
+                value: _selectedSalaire,
+                onChanged: (value) {
+                  setState(() {
+                    _selectedSalaire = value.toString();
+                  });
+                },
+                items: salaire.map((salaire) {
+                  return DropdownMenuItem(
+                    value: salaire,
+                    child: Text(salaire),
+                  );
+                }).toList(),
+                decoration: InputDecoration(
+                  labelText: 'Salaire',
+                  contentPadding: EdgeInsets.symmetric(
+                    vertical: 8.0,
+                    horizontal: 16.0,
+                  ),
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: addData,
+                child: Text('Ajouter/Modifier'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
