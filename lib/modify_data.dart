@@ -130,10 +130,10 @@ class _ModifyDataState extends State<ModifyData> {
               ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    final vetements = _vetementsController.text.trim();
-                    final nutrition = _nutritionController.text.trim();
-                    final sante = _santeController.text.trim();
-                    final devertissement = _devertissementController.text.trim();
+                    final vetements = int.tryParse(_vetementsController.text.trim()) ?? 0;
+                    final nutrition = int.tryParse(_nutritionController.text.trim()) ?? 0;
+                    final sante = int.tryParse(_santeController.text.trim()) ?? 0;
+                    final devertissement = int.tryParse(_devertissementController.text.trim()) ?? 0;
                     final documentRef =
                         firestore.collection(widget.cin).doc(widget.docId);
                     await documentRef

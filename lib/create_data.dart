@@ -78,7 +78,7 @@ class _CreateDataState extends State<CreateData> {
                 controller: _cinController,
                 decoration: InputDecoration(labelText: 'CIN'),
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
+                  if (value == null || value.isEmpty || value.length != 8) {
                     return 'Please enter CIN';
                   }
                   return null;

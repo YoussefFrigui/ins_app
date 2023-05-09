@@ -18,6 +18,7 @@ class _AddDataState extends State<AddData> {
   String _selectedProfession = 'cadres et professions libérales supérieures';
   String _selectedType = 'National';
   String _selectedZone = 'Grand Tunis';
+  String _selectedDecile = '1er décile';
   final nombre_p = [
     '1-2 personnes',
     '3-4 personnes',
@@ -58,6 +59,18 @@ class _AddDataState extends State<AddData> {
     'De 3000 à 4500 DT',
     'Plus que 4500 DT'
   ];
+  final decile = [
+    '1er décile',
+    '2ème décile',
+    '3ème décile',
+    '4ème décile',
+    '5ème décile',
+    '6ème décile',
+    '7ème décile',
+    '8ème décile',
+    '9ème décile',
+    '10ème décile'
+  ];
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -75,6 +88,7 @@ class _AddDataState extends State<AddData> {
         'type': _selectedType,
         'zone': _selectedZone,
         'salaire': _selectedSalaire,
+        'decile': _selectedDecile,
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -213,6 +227,29 @@ class _AddDataState extends State<AddData> {
                 }).toList(),
                 decoration: InputDecoration(
                   labelText: 'Salaire',
+                  contentPadding: EdgeInsets.symmetric(
+                    vertical: 8.0,
+                    horizontal: 16.0,
+                  ),
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(height: 16.0),
+              DropdownButtonFormField(
+                value: _selectedDecile,
+                onChanged: (value) {
+                  setState(() {
+                    _selectedDecile = value.toString();
+                  });
+                },
+                items: decile.map((decile) {
+                  return DropdownMenuItem(
+                    value: decile,
+                    child: Text(decile),
+                  );
+                }).toList(),
+                decoration: InputDecoration(
+                  labelText: 'Decile',
                   contentPadding: EdgeInsets.symmetric(
                     vertical: 8.0,
                     horizontal: 16.0,
