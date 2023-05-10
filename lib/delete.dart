@@ -29,51 +29,50 @@ class _DeleteTestState extends State<DeleteTest> {
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
-          child: Column(
+          child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              TextFormField(
-                controller: _cinController,
-                decoration: InputDecoration(
-                  hintText: 'Enter CIN of collection to delete',
-                ),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter a CIN';
-                  } else if (value.length != 8) {
-                    return 'Please enter a valid 8-digit CIN number';
-                  }
-                  return null;
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: ElevatedButton(
-                  onPressed: () async {
-                    String cin = _cinController.text;
-                    if (cin.isNotEmpty) {
-                      // Check if the collection exists
-                      bool collectionExists = await checkCollectionExists(cin);
-                      if (collectionExists) {
-                        // Delete all documents in the collection
-                        await deleteAllDocumentsInCollection(cin);
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text('All documents in collection deleted!'),
-                          duration: Duration(seconds: 2),
-                        ));
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text('Collection not found!'),
-                          duration: Duration(seconds: 2),
-                        ));
-                      }
-                      // Clear the form field
-                      _cinController.clear();
+              Expanded(
+                child: TextFormField(
+                  controller: _cinController,
+                  decoration: InputDecoration(
+                    hintText: 'Enter CIN of collection to delete',
+                  ),
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter a CIN';
+                    } else if (value.length != 8) {
+                      return 'Please enter a valid 8-digit CIN number';
                     }
+                    return null;
                   },
-                  child: Text('Delete'),
                 ),
+              ),
+              IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () async {
+                  String cin = _cinController.text;
+                  if (cin.isNotEmpty) {
+                    // Check if the collection exists
+                    bool collectionExists = await checkCollectionExists(cin);
+                    if (collectionExists) {
+                      // Delete all documents in the collection
+                      await deleteAllDocumentsInCollection(cin);
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text('All documents in collection deleted!'),
+                        duration: Duration(seconds: 2),
+                      ));
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text('Collection not found!'),
+                        duration: Duration(seconds: 2),
+                      ));
+                    }
+                    // Clear the form field
+                    _cinController.clear();
+                  }
+                },
               ),
             ],
           ),
