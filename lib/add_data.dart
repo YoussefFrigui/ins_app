@@ -109,7 +109,9 @@ class _AddDataState extends State<AddData> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xffffffff),
       appBar: AppBar(
+        centerTitle: true,
         title: Text('General info'),
       ),
       body: Padding(
@@ -257,10 +259,27 @@ class _AddDataState extends State<AddData> {
                   border: OutlineInputBorder(),
                 ),
               ),
-              ElevatedButton(
-                onPressed: addData,
-                child: Text('Ajouter/Modifier'),
-              ),
+              SizedBox(height: 16.0),
+              MaterialButton(
+                      onPressed: addData,
+                      color: Color(0x2d3a57e8),
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      padding: EdgeInsets.all(16),
+                      child: Text(
+                        "Create",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          fontStyle: FontStyle.normal,
+                        ),
+                      ),
+                      textColor: Color(0xff3a57e8),
+                      height: 50,
+                      minWidth: MediaQuery.of(context).size.width,
+                    ),
             ],
           ),
         ),
