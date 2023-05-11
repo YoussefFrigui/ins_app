@@ -49,9 +49,28 @@ class _DeleteTestState extends State<DeleteTest> {
                   },
                 ),
               ),
-              IconButton(
-                icon: Icon(Icons.search),
-                onPressed: () async {
+              MaterialButton(
+  onPressed: () {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Are you sure you want to delete?"),
+          content: Text("This action cannot be undone."),
+          actions: [
+            TextButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            ElevatedButton(
+              child: Text("Delete"),
+              style: ElevatedButton.styleFrom(
+                 // Set background color to red
+                primary: Colors.red,
+              ),
+              onPressed: () async {
                   String cin = _cinController.text;
                   if (cin.isNotEmpty) {
                     // Check if the collection exists
@@ -72,8 +91,24 @@ class _DeleteTestState extends State<DeleteTest> {
                     // Clear the form field
                     _cinController.clear();
                   }
-                },
-              ),
+          
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  },
+  child: Row(
+    children: [
+      Icon(Icons.delete),
+      SizedBox(width: 8),
+      Text("Delete"),
+    ],
+  ),
+)
+
             ],
           ),
         ),
@@ -85,7 +120,10 @@ class _DeleteTestState extends State<DeleteTest> {
   Future<bool> checkCollectionExists(String cin) async {
     bool exists = false;
     try {
-      await FirebaseFirestore.instance.collection(cin).get().then((QuerySnapshot querySnapshot) {
+      await FirebaseFirestore.instance
+          .collection(cin)
+          .get()
+          .then((QuerySnapshot querySnapshot) {
         querySnapshot.docs.forEach((doc) {
           if (doc.exists) {
             exists = true;
@@ -99,7 +137,8 @@ class _DeleteTestState extends State<DeleteTest> {
   }
 
   Future<void> deleteAllDocumentsInCollection(String cin) async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection(cin).get();
+    QuerySnapshot querySnapshot =
+        await FirebaseFirestore.instance.collection(cin).get();
     querySnapshot.docs.forEach((document) {
       document.reference.delete();
     });
