@@ -8,6 +8,7 @@ import 'package:ins_app/data_view.dart';
 import 'package:ins_app/display_data_docs.dart';
 import 'package:ins_app/existing_data.dart';
 import 'package:ins_app/modify_data.dart';
+import 'password_reset.dart';
 
 import 'delete.dart';
 
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: DataScreen(cin: ''));
+        home: AuthenticationPage(),
+        );
   }
 }
