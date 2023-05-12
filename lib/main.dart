@@ -5,7 +5,9 @@ import 'package:ins_app/AuthPage.dart';
 import 'package:ins_app/add_data.dart';
 import 'package:ins_app/create_data.dart';
 import 'package:ins_app/data_view.dart';
+import 'package:ins_app/display_data_docs.dart';
 import 'package:ins_app/modify_data.dart';
+
 import 'delete.dart';
 
 void main() async {
@@ -24,7 +26,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: DeleteTest(),
+      home: DataScreen(),
     );
   }
 }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ins_app/add_data.dart';
 import 'package:ins_app/modify_data.dart';
+import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+import 'display_data_docs.dart';
 
 class DataScreen extends StatefulWidget {
   @override
@@ -47,89 +49,151 @@ class _DataScreenState extends State<DataScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Firestore Demo'),
-      ),
-      body: Column(
-        children: <Widget>[
-          TextField(
-            decoration: InputDecoration(
-              hintText: 'Enter collection name',
+        backgroundColor: Color(0xffffffff),
+        appBar: AppBar(
+          elevation: 0,
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+          backgroundColor: Color(0x00ffffff),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero,
+          ),
+          title: Text(
+            "Verification",
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+              fontStyle: FontStyle.normal,
+              fontSize: 20,
+              color: Color(0xff000000),
             ),
-            onChanged: (value) {
-              collectionName = value;
-            },
           ),
-          ElevatedButton(
-            child: Text('Load data'),
-            onPressed: () async {
-              final snapshot = await FirebaseFirestore.instance
-                  .collection(collectionName)
-                  .get();
+        ),
+        body: Align(
+            alignment: Alignment.center,
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 30),
+              child: SingleChildScrollView(
+                  child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 30, horizontal: 0),
+                    child: Text(
+                      "Enter CIN",
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.clip,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontStyle: FontStyle.normal,
+                        fontSize: 18,
+                        color: Color(0xff000000),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    child: OtpTextField(
+                        numberOfFields: 8,
+                        showFieldAsBox: false,
+                        fieldWidth: 40,
+                        filled: true,
+                        fillColor: Color(0x00000000),
+                        enabledBorderColor: Color(0xff898a8e),
+                        focusedBorderColor: Color(0xff3a57e8),
+                        borderWidth: 2,
+                        margin: EdgeInsets.all(0),
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        obscureText: false,
+                        borderRadius: BorderRadius.circular(4.0),
+                        textStyle: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontStyle: FontStyle.normal,
+                          fontSize: 20,
+                          color: Color(0xff000000),
+                        ),
+                        onCodeChanged: (String value) {
+                          setState(() {
+                            collectionName = value;
+                          });
+                        },
+                        onSubmit: (String value) {
+                          setState(() {
+                            collectionName = value;
+                          });
+                        }),
+                  ),
+                  SizedBox(height: 40.0),
+                  MaterialButton(
+                    onPressed: () async {
+                      final snapshot = await FirebaseFirestore.instance
+                          .collection(collectionName)
+                          .get();
 
-              setState(() {
-                documents = snapshot.docs;
-              });
-            },
-          ),
-          Expanded(
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: documents.length,
-              itemBuilder: (BuildContext context, int index) {
-                final document = documents[index];
-                return Card(
-                  child: ListTile(
-                    title: Text('Document ${document.id}'),
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text('Document ${document.id}'),
-                            content: buildDataTable(document),
-                            actions: [
-                              SizedBox(
-                                width: kMinInteractiveDimension,
-                                height: kMinInteractiveDimension,
-                                child: IconButton(
-                                  icon: Icon(Icons.close),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
+                      setState(() {
+                        documents = snapshot.docs;
+                      });
+                    },
+                    color: Color(0xff3a57e8),
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    padding: EdgeInsets.all(16),
+                    child: Text(
+                      "Verify",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        fontStyle: FontStyle.normal,
+                      ),
+                    ),
+                    textColor: Color(0xffffffff),
+                    height: 50,
+                    minWidth: 150,
+                  ),
+                  SizedBox(
+                    height: 16.0,
+                  ),
+                  Flexible(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: documents.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final document = documents[index];
+                        return Card(
+                          margin: EdgeInsets.all(10),
+                          color: Color(0xff3a57e8),
+                          child: ListTile(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0),
+                              ),
+                              title: Center(
+                                child: Text(
+                                  'Table ${document.id}',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                    fontStyle: FontStyle.normal,
+                                  ),
                                 ),
                               ),
-                              TextButton(
-                                child: Text('Edit'),
-                                onPressed: () {
-                                  if (document.id == 'Depense') {
-                                    Navigator.of(context)
-                                        .push(MaterialPageRoute(
-                                            builder: (context) => ModifyData(
-                                                  cin: collectionName,
-                                                  docId: 'Depense',
-                                                )));
-                                  } else if (document.id == 'General info') {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (context) => AddData(
-                                                collectionName:
-                                                    collectionName)));
-                                  }
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
+                              onTap: () {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => DataDocDisplay(collectionName: collectionName, documentID: document.id)),
+  );
+},
+),
+                        );
+                      },
+                    ),
                   ),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
+                ],
+              )),
+            )));
   }
 }
