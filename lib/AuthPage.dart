@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ins_app/homepage.dart';
 import 'package:ins_app/Signup.dart';
+import 'password_reset.dart';
 
 class AuthenticationPage extends StatefulWidget {
   @override
@@ -227,16 +228,25 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                       padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
                       child: Align(
                         alignment: Alignment.centerRight,
-                        child: Text(
-                          "Forgot Password ?",
-                          textAlign: TextAlign.start,
-                          overflow: TextOverflow.clip,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontStyle: FontStyle.normal,
-                            fontSize: 14,
-                            color: Color(0xff9e9e9e),
+                        child: GestureDetector(
+                          child: Text(
+                            "Forgot Password ?",
+                            textAlign: TextAlign.start,
+                            overflow: TextOverflow.clip,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontStyle: FontStyle.normal,
+                              fontSize: 14,
+                              color: Color(0xff9e9e9e),
+                            ),
                           ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PasswordReset()),
+                            );
+                          },
                         ),
                       ),
                     ),
@@ -283,4 +293,3 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
     );
   }
 }
-
