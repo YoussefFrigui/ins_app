@@ -6,6 +6,7 @@ import 'package:ins_app/add_data.dart';
 import 'package:ins_app/create_data.dart';
 import 'package:ins_app/data_view.dart';
 import 'package:ins_app/display_data_docs.dart';
+import 'package:ins_app/existing_data.dart';
 import 'package:ins_app/modify_data.dart';
 
 import 'delete.dart';
@@ -22,11 +23,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'My App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: DataScreen(),
-    );
+        title: 'My App',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: DataScreen(cin: ''));
   }
 }

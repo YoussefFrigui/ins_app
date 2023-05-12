@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:ins_app/add_data.dart';
+import 'package:ins_app/create_data.dart';
+import 'package:ins_app/data_view.dart';
 import 'modify_data.dart';
+import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 
 class ExistingData extends StatefulWidget {
   @override
@@ -12,6 +15,7 @@ class _ExistingDataState extends State<ExistingData> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final _formKey = GlobalKey<FormState>();
   final _cinController = TextEditingController();
+  String cin = '';
   List<String> _docIds = [];
 
   Future<bool> checkCollectionExists(String cin) async {
@@ -63,26 +67,46 @@ class _ExistingDataState extends State<ExistingData> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TextFormField(
-                controller: _cinController,
-                decoration: InputDecoration(labelText: 'CIN'),
-                validator: (value) {
-                  if (value == null || value.isEmpty || value.length != 8) {
-                    return 'Please enter CIN';
-                  }
-                  return null;
+              OtpTextField(
+                numberOfFields: 8,
+                showFieldAsBox: false,
+                fieldWidth: 40,
+                filled: true,
+                fillColor: Color(0x00000000),
+                enabledBorderColor: Color(0xff898a8e),
+                focusedBorderColor: Color(0xff3a57e8),
+                borderWidth: 2,
+                margin: EdgeInsets.all(0),
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                obscureText: false,
+                borderRadius: BorderRadius.circular(4.0),
+                textStyle: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontStyle: FontStyle.normal,
+                  fontSize: 20,
+                  color: Color(0xff000000),
+                ),
+                onCodeChanged: (String value) {
+                  setState(() {
+                    cin = value;
+                  });
+                },
+                onSubmit: (String value) {
+                  setState(() {
+                    cin = value;
+                  });
                 },
               ),
               SizedBox(height: 32.0),
-              ElevatedButton(
+              MaterialButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    final cin = _cinController.text.trim();
                     final created = await checkCollectionExists(cin);
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
-                          created ? 'Already created' : 'CIN added',
+                          created ? 'CIN EXIST' : 'CIN added',
                         ),
                         duration: Duration(seconds: 2),
                       ),
@@ -96,10 +120,32 @@ class _ExistingDataState extends State<ExistingData> {
                           ),
                         ),
                       );
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DataScreen(cin: cin)),
+                      );
                     }
                   }
                 },
-                child: Text('Add CIN'),
+                color: Color(0xff3a57e8),
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                padding: EdgeInsets.all(16),
+                child: Text(
+                  "Add",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    fontStyle: FontStyle.normal,
+                  ),
+                ),
+                textColor: Color(0xffffffff),
+                height: 50,
+                minWidth: 150,
               ),
             ],
           ),

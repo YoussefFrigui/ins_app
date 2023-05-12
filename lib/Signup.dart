@@ -102,7 +102,8 @@ class _SignUpState extends State<SignUp> {
 
       if (user != null) {
         await user.updateProfile(
-          displayName: _firstNameController.text + ' ' + _lastNameController.text,
+          displayName:
+              _firstNameController.text + ' ' + _lastNameController.text,
         );
 
         await user.reload();
