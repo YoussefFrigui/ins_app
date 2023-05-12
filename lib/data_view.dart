@@ -8,11 +8,19 @@ import 'display_data_docs.dart';
 class DataScreen extends StatefulWidget {
   @override
   _DataScreenState createState() => _DataScreenState();
+  final String cin;
+
+  DataScreen({required this.cin});
 }
 
 class _DataScreenState extends State<DataScreen> {
   String collectionName = '';
   List<QueryDocumentSnapshot<Map<String, dynamic>>> documents = [];
+  TextEditingController _textEditingController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+  }
 
   Widget buildDataTable(QueryDocumentSnapshot<Map<String, dynamic>> document) {
     return SingleChildScrollView(
@@ -167,27 +175,30 @@ class _DataScreenState extends State<DataScreen> {
                           margin: EdgeInsets.all(10),
                           color: Color(0xff3a57e8),
                           child: ListTile(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0),
-                              ),
-                              title: Center(
-                                child: Text(
-                                  'Table ${document.id}',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w700,
-                                    fontStyle: FontStyle.normal,
-                                  ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            title: Center(
+                              child: Text(
+                                'Table ${document.id}',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  fontStyle: FontStyle.normal,
                                 ),
                               ),
-                              onTap: () {
-  Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => DataDocDisplay(collectionName: collectionName, documentID: document.id)),
-  );
-},
-),
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => DataDocDisplay(
+                                        collectionName: collectionName,
+                                        documentID: document.id)),
+                              );
+                            },
+                          ),
                         );
                       },
                     ),

@@ -53,22 +53,16 @@ class _DataDocDisplayState extends State<DataDocDisplay> {
                     child: MaterialButton(
                       onPressed: () {
                         if (snapshot.data!.id == 'Depense') {
-                                            Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        ModifyData(
-                                                          cin: widget.collectionName,
-                                                          docId: 'Depense',
-                                                        )));
-                                          } else if (snapshot.data!.id ==
-                                              'General info') {
-                                            Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                    builder: (context) => AddData(
-                                                        collectionName:
-                                                            widget.collectionName)));
-                                          }
-                        
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ModifyData(
+                                    cin: widget.collectionName,
+                                    docId: 'Depense',
+                                  )));
+                        } else if (snapshot.data!.id == 'General info') {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => AddData(
+                                  collectionName: widget.collectionName)));
+                        }
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
