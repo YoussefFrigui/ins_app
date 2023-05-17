@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:ins_app/AuthPage.dart';
+import 'package:ins_app/Signup.dart';
 import 'package:ins_app/add_data.dart';
 import 'package:ins_app/create_data.dart';
 import 'package:ins_app/data_view.dart';
@@ -28,8 +29,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: ExistingData(),
+        home: AuthenticationPage(),
         );
   }
 }
-  

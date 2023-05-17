@@ -32,6 +32,12 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
           password: _passwordController.text,
         );
 
+        // Update login date in Firestore
+        String userId = userCredential.user!.uid;
+        CollectionReference usersCollection =
+            FirebaseFirestore.instance.collection('users');
+        usersCollection.doc(userId).update({'lastLoginDate': DateTime.now()});
+
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -259,7 +265,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                         children: [
                           MaterialButton(
                             onPressed: () {
-                              _authenticate;
+                              _authenticate();
                             },
                             color: Color(0xff3a57e8),
                             elevation: 0,

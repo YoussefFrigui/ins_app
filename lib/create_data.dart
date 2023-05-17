@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'add_data.dart';
 
 class CreateData extends StatefulWidget {
@@ -79,107 +80,85 @@ class _CreateDataState extends State<CreateData> {
       body: Align(
         alignment: Alignment.centerLeft,
         child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-            child: SingleChildScrollView(
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      "Page creation",
-                      textAlign: TextAlign.start,
-                      overflow: TextOverflow.clip,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
+          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "Page creation",
+                    textAlign: TextAlign.start,
+                    overflow: TextOverflow.clip,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontStyle: FontStyle.normal,
+                      fontSize: 22,
+                      color: Color(0xff000000),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16, horizontal: 0),
+                    child: OtpTextField(
+                      numberOfFields: 8,
+                      showFieldAsBox: false,
+                      fieldWidth: 40,
+                      filled: true,
+                      fillColor: Color(0x00000000),
+                      enabledBorderColor: Color(0xff898a8e),
+                      focusedBorderColor: Color(0xff3a57e8),
+                      borderWidth: 2,
+                      margin: EdgeInsets.all(0),
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      obscureText: false,
+                      borderRadius: BorderRadius.circular(4.0),
+                      textStyle: TextStyle(
+                        fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
-                        fontSize: 22,
+                        fontSize: 20,
                         color: Color(0xff000000),
                       ),
+                      onCodeChanged: (String value) {
+                        setState(() {
+                          _cinController.text = value;
+                        });
+                      },
+                      onSubmit: (String value) {
+                        setState(() {
+                          _cinController.text = value;
+                        });
+                      },
                     ),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 16, horizontal: 0),
-                      child: TextFormField(
-                        controller: _cinController,
-                        validator: (value) {
-                          if (value?.isEmpty ?? true || value!.length != 8) {
-                            return 'Please enter CIN';
-                          }
-                          return null;
-                        },
-                        obscureText: false,
-                        textAlign: TextAlign.start,
-                        maxLines: 1,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontStyle: FontStyle.normal,
-                          fontSize: 14,
-                          color: Color(0xff000000),
-                        ),
-                        decoration: InputDecoration(
-                          disabledBorder: UnderlineInputBorder(
-                            borderRadius: BorderRadius.circular(4.0),
-                            borderSide:
-                                BorderSide(color: Color(0xff000000), width: 1),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderRadius: BorderRadius.circular(4.0),
-                            borderSide:
-                                BorderSide(color: Color(0xff000000), width: 1),
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderRadius: BorderRadius.circular(4.0),
-                            borderSide:
-                                BorderSide(color: Color(0xff000000), width: 1),
-                          ),
-                          labelText: "CIN",
-                          labelStyle: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontStyle: FontStyle.normal,
-                            fontSize: 16,
-                            color: Color(0xff7c7878),
-                          ),
-                          hintText: "Enter CIN  (8 digits)",
-                          hintStyle: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontStyle: FontStyle.normal,
-                            fontSize: 14,
-                            color: Color(0xff000000),
-                          ),
-                          filled: true,
-                          fillColor: Color(0x00ffffff),
-                          isDense: false,
-                          contentPadding: EdgeInsets.all(0),
-                        ),
+                  ),
+                  MaterialButton(
+                    onPressed: createCollection,
+                    color: Color(0x2d3a57e8),
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                    padding: EdgeInsets.all(16),
+                    child: Text(
+                      "Create",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        fontStyle: FontStyle.normal,
                       ),
                     ),
-                    MaterialButton(
-                      onPressed: createCollection,
-                      color: Color(0x2d3a57e8),
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                      padding: EdgeInsets.all(16),
-                      child: Text(
-                        "Create",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          fontStyle: FontStyle.normal,
-                        ),
-                      ),
-                      textColor: Color(0xff3a57e8),
-                      height: 50,
-                      minWidth: MediaQuery.of(context).size.width,
-                    ),
-                  ],
-                ),
+                    textColor: Color(0xff3a57e8),
+                    height: 50,
+                    minWidth: MediaQuery.of(context).size.width,
+                  ),
+                ],
               ),
-            )),
+            ),
+          ),
+        ),
       ),
     );
   }

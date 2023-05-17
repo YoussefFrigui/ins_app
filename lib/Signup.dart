@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ins_app/homepage.dart';
 
 class SignUp extends StatefulWidget {
@@ -108,6 +109,14 @@ class _SignUpState extends State<SignUp> {
 
         await user.reload();
       }
+
+      // Store user data in Firestore collection "users"
+      await FirebaseFirestore.instance.collection('users').doc(user!.uid).set({
+        'email': _emailController.text,
+        'firstName': _firstNameController.text,
+        'lastName': _lastNameController.text,
+        'lastLogin': DateTime.now(),
+      });
 
       Navigator.pushReplacement(
         context,
