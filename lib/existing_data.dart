@@ -1,3 +1,5 @@
+
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:ins_app/add_data.dart';
@@ -5,6 +7,7 @@ import 'package:ins_app/create_data.dart';
 import 'package:ins_app/data_view.dart';
 import 'modify_data.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+import 'display_data_docs.dart';
 
 class ExistingData extends StatefulWidget {
   @override
@@ -106,12 +109,12 @@ class _ExistingDataState extends State<ExistingData> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
-                          created ? 'CIN EXIST' : 'CIN added',
+                          created ? 'CIN EXISTS' : 'CIN added',
                         ),
                         duration: Duration(seconds: 2),
                       ),
                     );
-                    if (created == false) {
+                    if (!created) {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -121,11 +124,13 @@ class _ExistingDataState extends State<ExistingData> {
                         ),
                       );
                     } else {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => DataScreen(cin: cin)),
-                      );
+                      final snapshot = await FirebaseFirestore.instance
+                          .collection(cin)
+                          .get();
+
+                      setState(() {
+                        _docIds = snapshot.docs.map((doc) => doc.id).toList();
+                      });
                     }
                   }
                 },
@@ -146,6 +151,46 @@ class _ExistingDataState extends State<ExistingData> {
                 textColor: Color(0xffffffff),
                 height: 50,
                 minWidth: 150,
+              ),
+              Flexible(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: _docIds.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final document = _docIds[index];
+                    return Card(
+                      margin: EdgeInsets.all(10),
+                      color: Color(0xff3a57e8),
+                      child: ListTile(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                        title: Center(
+                          child: Text(
+                            'Table ${_docIds[index]}',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              fontStyle: FontStyle.normal,
+                            ),
+                          ),
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DataDocDisplay(
+                                collectionName: cin,
+                                documentID: document,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
               ),
             ],
           ),

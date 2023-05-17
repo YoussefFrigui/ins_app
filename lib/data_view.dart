@@ -17,9 +17,14 @@ class _DataScreenState extends State<DataScreen> {
   String collectionName = '';
   List<QueryDocumentSnapshot<Map<String, dynamic>>> documents = [];
   TextEditingController _textEditingController = TextEditingController();
+  TextEditingController _otpTextController = TextEditingController();
   @override
   void initState() {
     super.initState();
+     if (widget.cin != null && widget.cin.isNotEmpty) {
+    _otpTextController.text = widget.cin;
+    collectionName = widget.cin;
+  }
   }
 
   Widget buildDataTable(QueryDocumentSnapshot<Map<String, dynamic>> document) {
@@ -103,6 +108,7 @@ class _DataScreenState extends State<DataScreen> {
                   Padding(
                     padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                     child: OtpTextField(
+                        handleControllers: (controllers) => _otpTextController,
                         numberOfFields: 8,
                         showFieldAsBox: false,
                         fieldWidth: 40,
@@ -124,12 +130,12 @@ class _DataScreenState extends State<DataScreen> {
                         ),
                         onCodeChanged: (String value) {
                           setState(() {
-                            collectionName = value;
+                            collectionName = _otpTextController.text + value;
                           });
                         },
                         onSubmit: (String value) {
                           setState(() {
-                            collectionName = value;
+                            collectionName = _otpTextController.text + value;
                           });
                         }),
                   ),

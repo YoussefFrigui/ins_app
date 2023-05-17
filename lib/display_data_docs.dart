@@ -77,23 +77,30 @@ class _DataDocDisplayState extends State<DataDocDisplay> {
                 } else {
                   final entry = data.entries.elementAt(index);
                   return Card(
+                    color: Color(0xff2cb1e4),
+                    shadowColor: Color(0xff9ec34a,),
+                    elevation: 100,
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            entry.key,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18.0,
+                          Center(
+                            child: Text(
+                              entry.key.replaceFirst(entry.key[0],entry.key[0].toUpperCase()),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18.0,
+                              ),
                             ),
                           ),
                           SizedBox(height: 8.0),
-                          Text(
-                            entry.value.toString(),
-                            style: TextStyle(fontSize: 18.0),
+                          Center(
+                            child: Text(
+                              entry.value.toString(),
+                              style: TextStyle(fontSize: 18.0),
+                            ),
                           ),
                         ],
                       ),
