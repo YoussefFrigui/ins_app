@@ -32,7 +32,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
           password: _passwordController.text,
         );
 
-        // Update login date in Firestore
+        // Update login date in Firestore commit
         String userId = userCredential.user!.uid;
         CollectionReference usersCollection =
             FirebaseFirestore.instance.collection('users');
