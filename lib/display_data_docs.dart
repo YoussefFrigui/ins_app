@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'add_data.dart';
 import 'modify_data.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class DataDocDisplay extends StatefulWidget {
   final String collectionName;
@@ -43,106 +44,88 @@ class _DataDocDisplayState extends State<DataDocDisplay> {
 
             final data = snapshot.data!.data()!;
 
-            return ListView.builder(
-              padding: EdgeInsets.all(16.0),
-              itemCount: data.length + 1,
-            itemBuilder: (BuildContext c, itemcount) {
- 
-  return AnimationConfiguration.staggeredList(
-    position: itemcount,
-    delay: Duration(milliseconds: 100),
-    child: SlideAnimation(
-      duration: Duration(milliseconds: 2500),
-      curve: Curves.fastLinearToSlowEaseIn,
-      horizontalOffset: 30,
-      verticalOffset: 300.0,
-      child: FlipAnimation(
-        duration: Duration(milliseconds: 3000),
-        curve: Curves.fastLinearToSlowEaseIn,
-        flipAxis: FlipAxis.y,
-        child: Container(
-          margin: EdgeInsets.only(bottom: _w / 20),
-          height: _w / 4,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(
-              Radius.circular(20),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 40,
-                spreadRadius: 10,
-              ),
-            ],
-          ),
-
-
-              
-                if (index == data.length) {
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 16.0),
-                    child: MaterialButton(
-                      onPressed: () {
-                        if (snapshot.data!.id == 'Depense') {
-                          Navigator.of(context).push(MaterialPageRoute(
+            return AnimationLimiter(
+              child: ListView.builder(
+                padding: EdgeInsets.all(16.0),
+                itemCount: data.length + 1,
+                itemBuilder: (BuildContext context, int index) {
+                  if (index == data.length) {
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 16.0),
+                      child: MaterialButton(
+                        onPressed: () {
+                          if (snapshot.data!.id == 'Depense') {
+                            Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => ModifyData(
-                                    cin: widget.collectionName,
-                                    docId: 'Depense',
-                                  )));
-                        } else if (snapshot.data!.id == 'General info') {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => AddData(
-                                  collectionName: widget.collectionName)));
-                        }
-                      },
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.edit),
-                          SizedBox(width: 8.0),
-                          Text('Edit'),
-                        ],
-                      ),
-                    ),
-                  );
-                } else {
-                  final entry = data.entries.elementAt(index);
-                  return Card(
-                    color: Color(0xff2cb1e4),
-                    shadowColor: Color(0xff9ec34a,),
-                    elevation: 100,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Center(
-                            child: Text(
-                              entry.key.replaceFirst(entry.key[0],entry.key[0].toUpperCase()),
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18.0,
+                                cin: widget.collectionName,
+                                docId: 'Depense',
                               ),
-                            ),
-                          ),
-                          SizedBox(height: 8.0),
-                          Center(
-                            child: Text(
-                              entry.value.toString(),
-                              style: TextStyle(fontSize: 18.0),
-                            ),
-                          ),
-                        ],
+                            ));
+                          } else if (snapshot.data!.id == 'General info') {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) =>
+                                  AddData(collectionName: widget.collectionName),
+                            ));
+                          }
+                        },
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.edit),
+                            SizedBox(width: 8.0),
+                            Text('Edit'),
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                }
-              },
-
-
-
+                    );
+                  } else {
+                    final entry = data.entries.elementAt(index);
+                    return AnimationConfiguration.staggeredList(
+                      position: index,
+                      delay: Duration(milliseconds: 100),
+                      child: SlideAnimation(
+                        duration: Duration(milliseconds: 500),
+                        verticalOffset: 50.0,
+                        child: Card(
+                          color: Color(0xff1C69AE),
+                          shadowColor: Color(0xff2EB1E3),
+                          elevation: 100,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Row(
+                                    children: [
+                                      _getIconForEntry(entry.key), // Get the icon based on entry.key
+                                      SizedBox(width: 8.0),
+                                      Text(
+                                        entry.key.replaceFirst(entry.key[0], entry.key[0].toUpperCase()),
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18.0,
+                                        ),
+                                      ),
+                                      SizedBox(width: 10.0),
+                                      Text(
+                                        entry.value.toString(),
+                                        style: TextStyle(fontSize: 16.0),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                },
+              ),
             );
           } else {
             return Center(child: CircularProgressIndicator());
@@ -151,48 +134,33 @@ class _DataDocDisplayState extends State<DataDocDisplay> {
       ),
     );
   }
+
+  Icon _getIconForEntry(String key) {
+    // Define the icon mapping based on your requirements
+    switch (key) {
+      case 'nutrition':
+        return Icon(Icons.food_bank_outlined);
+      case 'vetements':
+        return Icon(Icons.shopping_bag_outlined);
+      case 'devertissement':
+        return Icon(Icons.sports_esports_outlined);
+      case 'sante':
+        return Icon(Icons.medical_services_outlined);
+      case 'profession':
+        return Icon(Icons.work_outline_outlined);
+      case 'nombre_p':
+        return Icon(Icons.people_alt_outlined);
+      case 'decile':
+        return Icon(Icons.money_off_outlined);
+      case 'zone':
+        return Icon(Icons.location_on_outlined);
+      case 'salaire':
+        return Icon(Icons.money_outlined);
+      case 'type':
+        return Icon(Icons.category_outlined);
+      default:
+        // Return a default icon if no mapping is found
+        return Icon(Icons.info);
+    }
+  }
 }
-
-/*
-
-itemBuilder: (BuildContext c, int i) {
- 
-  return AnimationConfiguration.staggeredList(
-    position: i,
-    delay: Duration(milliseconds: 100),
-    child: SlideAnimation(
-      duration: Duration(milliseconds: 2500),
-      curve: Curves.fastLinearToSlowEaseIn,
-      horizontalOffset: 30,
-      verticalOffset: 300.0,
-      child: FlipAnimation(
-        duration: Duration(milliseconds: 3000),
-        curve: Curves.fastLinearToSlowEaseIn,
-        flipAxis: FlipAxis.y,
-        child: Container(
-          margin: EdgeInsets.only(bottom: _w / 20),
-          height: _w / 4,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(
-              Radius.circular(20),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 40,
-                spreadRadius: 10,
-              ),
-            ],
-          ),
-          child: Center(
-            child: Text(
-              itemText,
-              style: TextStyle(fontSize: 16),
-            ),
-          ),
-        ),
-      ),
-    ),
-  );
-}, */
