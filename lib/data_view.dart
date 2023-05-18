@@ -1,3 +1,5 @@
+//verifier citoyen existe si oui afficher ses données sinon faire rien
+// importi display_data_docs.dart
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ins_app/add_data.dart';

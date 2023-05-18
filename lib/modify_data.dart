@@ -1,5 +1,7 @@
+// Edit "Depense"
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:ins_app/homepage.dart';
 
 class ModifyData extends StatefulWidget {
   final String cin;
@@ -305,8 +307,12 @@ class _ModifyDataState extends State<ModifyData> {
                             SetOptions(merge: true));
                         await documentRef.set({'nutrition': nutrition.toInt()},
                             SetOptions(merge: true));
-                        Navigator.pop(context);
-                      }
+                            Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            HomePage()),
+                  );}
                     },
                     color: Color(0x2d3a57e8),
                     elevation: 0,

@@ -1,3 +1,4 @@
+// edit document "General Info"
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:ins_app/modify_data.dart';

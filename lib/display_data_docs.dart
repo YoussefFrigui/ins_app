@@ -1,3 +1,4 @@
+// necessaire pour afficher les données d'un document dans une collection
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'add_data.dart';
