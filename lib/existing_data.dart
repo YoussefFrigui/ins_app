@@ -117,7 +117,7 @@ class _ExistingDataState extends State<ExistingData> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => AddData(
-                            collectionName: cin,
+                            cin: cin,
                           ),
                         ),
                       );
@@ -179,7 +179,7 @@ class _ExistingDataState extends State<ExistingData> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => DataDocDisplay(
-                                collectionName: cin,
+                                cin: cin,
                                 documentID: document,
                               ),
                             ),

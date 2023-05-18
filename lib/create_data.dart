@@ -1,14 +1,9 @@
-// cREATION D UN NOVEAU CITOYEN
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'add_data.dart';
 
 class CreateData extends StatefulWidget {
-  final String cin;
-
-  CreateData(this.cin);
-
   @override
   _CreateDataState createState() => _CreateDataState();
 }
@@ -21,18 +16,14 @@ class _CreateDataState extends State<CreateData> {
   @override
   void initState() {
     super.initState();
-    _cinController = TextEditingController(); // <-- initialize the controller
+    _cinController = TextEditingController();
   }
 
-  Future<String?> checkCollectionExists(String collectionName) async {
-    final collectionRef = firestore.collection(collectionName);
-    final docSnapshot = await collectionRef.doc('dummy').get();
+  Future<bool> checkCollectionExists(String cin) async {
+    final collectionRef = firestore.collection('Citoyen');
+    final docSnapshot = await collectionRef.doc(cin).get();
 
-    if (docSnapshot.exists) {
-      return collectionRef.id;
-    } else {
-      return null;
-    }
+    return docSnapshot.exists;
   }
 
   void createCollection() async {
@@ -43,14 +34,28 @@ class _CreateDataState extends State<CreateData> {
           SnackBar(content: Text('Please enter CIN')),
         );
       } else {
-        final existingCollection = await firestore.collection(cin).get();
+        final collectionExists = await checkCollectionExists(cin);
 
-        if (existingCollection.docs.isNotEmpty) {
+        if (collectionExists) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Collection with CIN $cin already exists!')),
           );
         } else {
-          await firestore.collection(cin).doc('General info').set({});
+          await firestore.collection('Citoyen').doc(cin).set({});
+
+          await firestore
+              .collection('Citoyen')
+              .doc(cin)
+              .collection('data')
+              .doc('General info')
+              .set({});
+
+          await firestore
+              .collection('Citoyen')
+              .doc(cin)
+              .collection('data')
+              .doc('Depense')
+              .set({});
 
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Collection $cin created successfully!')),
@@ -59,15 +64,12 @@ class _CreateDataState extends State<CreateData> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => AddData(
-                collectionName: cin,
-              ),
+              builder: (context) => AddData(cin: cin),
             ),
           );
         }
       }
     } else {
-      // Show an error message if the field is empty
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Please enter CIN')),
       );

@@ -14,7 +14,7 @@ class HomePage extends StatelessWidget {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => CreateData('')),
+              MaterialPageRoute(builder: (context) => CreateData()),
             );
           },
           child: const Text('Go to Existing Data'),

@@ -57,7 +57,7 @@ Future<void> _authenticate() async {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => CreateData(''),
+              builder: (BuildContext context) => CreateData(),
             ),
           );
         } else {

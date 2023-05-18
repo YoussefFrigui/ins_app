@@ -1,4 +1,3 @@
-// necessaire pour afficher les données d'un document dans une collection
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'add_data.dart';
@@ -6,10 +5,10 @@ import 'modify_data.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class DataDocDisplay extends StatefulWidget {
-  final String collectionName;
+  final String cin;
   final String documentID;
 
-  DataDocDisplay({required this.collectionName, required this.documentID});
+  DataDocDisplay({required this.cin, required this.documentID});
 
   @override
   _DataDocDisplayState createState() => _DataDocDisplayState();
@@ -22,7 +21,9 @@ class _DataDocDisplayState extends State<DataDocDisplay> {
   void initState() {
     super.initState();
     _futureDocument = FirebaseFirestore.instance
-        .collection(widget.collectionName)
+        .collection('Citoyen')
+        .doc(widget.cin)
+        .collection('data')
         .doc(widget.documentID)
         .get();
   }
@@ -46,86 +47,95 @@ class _DataDocDisplayState extends State<DataDocDisplay> {
             final data = snapshot.data!.data()!;
 
             return AnimationLimiter(
-              child: ListView.builder(
-                padding: EdgeInsets.all(16.0),
-                itemCount: data.length + 1,
-                itemBuilder: (BuildContext context, int index) {
-                  if (index == data.length) {
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 16.0),
-                      child: MaterialButton(
-                        onPressed: () {
-                          if (snapshot.data!.id == 'Depense') {
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ModifyData(
-                                cin: widget.collectionName,
-                                docId: 'Depense',
-                              ),
-                            ));
-                          } else if (snapshot.data!.id == 'General info') {
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  AddData(collectionName: widget.collectionName),
-                            ));
-                          }
-                        },
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.edit),
-                            SizedBox(width: 8.0),
-                            Text('Edit'),
-                          ],
-                        ),
-                      ),
-                    );
-                  } else {
-                    final entry = data.entries.elementAt(index);
-                    return AnimationConfiguration.staggeredList(
-                      position: index,
-                      delay: Duration(milliseconds: 100),
-                      child: SlideAnimation(
-                        duration: Duration(milliseconds: 500),
-                        verticalOffset: 50.0,
-                        child: Card(
-                          color: Color(0xff1C69AE),
-                          shadowColor: Color(0xff2EB1E3),
-                          elevation: 100,
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Row(
-                                    children: [
-                                      _getIconForEntry(entry.key), // Get the icon based on entry.key
-                                      SizedBox(width: 8.0),
-                                      Text(
-                                        entry.key.replaceFirst(entry.key[0], entry.key[0].toUpperCase()),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18.0,
-                                        ),
-                                      ),
-                                      SizedBox(width: 10.0),
-                                      Text(
-                                        entry.value.toString(),
-                                        style: TextStyle(fontSize: 16.0),
-                                      ),
-                                    ],
-                                  ),
+              child: Container(
+                child: ListView.builder(
+                  padding: EdgeInsets.all(16.0),
+                  itemCount: data.length + 1,
+                  itemBuilder: (BuildContext context, int index) {
+                    if (index == data.length) {
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 16.0),
+                        child: MaterialButton(
+                          onPressed: () {
+                            if (snapshot.data!.id == 'Depense') {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => ModifyData(
+                                  cin: widget.cin,
                                 ),
-                              ],
+                              ));
+                            } else if (snapshot.data!.id == 'General info') {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => AddData(cin: widget.cin),
+                              ));
+                            }
+                          },
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.edit),
+                              SizedBox(width: 8.0),
+                              Text('Edit'),
+                            ],
+                          ),
+                        ),
+                      );
+                    } else {
+                      final entry = data.entries.elementAt(index);
+                      return AnimationConfiguration.staggeredList(
+                        position: index,
+                        delay: Duration(milliseconds: 100),
+                        child: SlideAnimation(
+                          duration: Duration(milliseconds: 500),
+                          verticalOffset: 50.0,
+                          child: InkWell(
+                            onTap: () {
+                              // Perform actions on tap if needed
+                            },
+                            child: Card(
+                              color: Color(0xff1C69AE),
+                              shadowColor: Color(0xff2EB1E3),
+                              elevation: 100,
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Row(
+                                        children: [
+                                          _getIconForEntry(entry
+                                              .key), // Get the icon based on entry.key
+                                          SizedBox(width: 8.0),
+                                          Text(
+                                            entry.key.replaceFirst(entry.key[0],
+                                                entry.key[0].toUpperCase()),
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18.0,
+                                            ),
+                                          ),
+                                          SizedBox(width: 10.0),
+                                          Expanded(
+                                            child: Text(
+                                              entry.value.toString(),
+                                              style: TextStyle(fontSize: 16.0),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    );
-                  }
-                },
+                      );
+                    }
+                  },
+                ),
               ),
             );
           } else {

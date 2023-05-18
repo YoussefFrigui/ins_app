@@ -1,12 +1,11 @@
-// edit document "General Info"
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ins_app/modify_data.dart';
 
 class AddData extends StatefulWidget {
-  final String collectionName;
+  final String cin;
 
-  AddData({required this.collectionName});
+  AddData({required this.cin});
 
   @override
   _AddDataState createState() => _AddDataState();
@@ -31,9 +30,9 @@ class _AddDataState extends State<AddData> {
     'cadres et professions libérales supérieures',
     'cadres et professions libérales moyens',
     'autres employés',
-    'patrons des petits métiers dans l' 'industrie',
+    'patrons des petits métiers dans l\'industrie',
     'artisans et indépendants des petits métiers',
-    '	ouvriers non agricoles',
+    'ouvriers non agricoles',
     'exploitants agricoles',
     'Ouvriers agricoles',
     'Chômeurs',
@@ -78,12 +77,19 @@ class _AddDataState extends State<AddData> {
   void addData() async {
     if (_formKey.currentState!.validate()) {
       final docSnapshot = await firestore
-          .collection(widget.collectionName)
+          .collection('Citoyen')
+          .doc(widget.cin)
+          .collection('data')
           .doc('General info')
           .get();
       final docID = docSnapshot.id;
 
-      await firestore.collection(widget.collectionName).doc(docID).set({
+      await firestore
+          .collection('Citoyen')
+          .doc(widget.cin)
+          .collection('data')
+          .doc(docID)
+          .set({
         'nombre_p': _selectedNombre_p,
         'profession': _selectedProfession,
         'type': _selectedType,
@@ -100,8 +106,8 @@ class _AddDataState extends State<AddData> {
       context,
       MaterialPageRoute(
         builder: (context) => ModifyData(
-          cin: widget.collectionName,
-          docId: 'Depense',
+          cin: widget.cin,
+          
         ),
       ),
     );
