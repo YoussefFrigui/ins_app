@@ -25,13 +25,17 @@ class UsersScreen extends StatelessWidget {
             itemCount: documents.length,
             itemBuilder: (context, index) {
               DocumentSnapshot document = documents[index];
-              Map<String, dynamic>? userData = document.data() as Map<String, dynamic>?;
+              Map<String, dynamic>? userData =
+                  document.data() as Map<String, dynamic>?;
 
               String name = userData?['Name'] ?? 'N/A'; // Access Name field
               String email = userData?['email'] ?? 'N/A'; // Access email field
               String role = userData?['Role'] ?? 'Employé'; // Access role field
 
+              Color cardColor = role == 'Admin' ? Colors.red : Colors.blue;
+
               return Card(
+                color: cardColor,
                 child: ListTile(
                   leading: Icon(Icons.person), // Person icon
                   title: Text(name), // Display the name
@@ -68,21 +72,28 @@ class UsersScreen extends StatelessWidget {
                                       bool collectionExists =
                                           await checkCollectionExists(uid);
                                       if (collectionExists) {
-                                        await deleteAllDocumentsInCollection(uid);
-                                        await deleteFirebaseUser(uid);
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(
-                                            content: Text('User deleted!'),
-                                            duration: Duration(seconds: 2),
-                                          ),
-                                        );
+                                        await deleteAllDocumentsInCollection(
+                                            uid);
+
+                                        if (context.mounted) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text('User deleted!'),
+                                              duration: Duration(seconds: 2),
+                                            ),
+                                          );
+                                        }
                                       } else {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(
-                                            content: Text('User not found!'),
-                                            duration: Duration(seconds: 2),
-                                          ),
-                                        );
+                                        if (context.mounted) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text('User not found!'),
+                                              duration: Duration(seconds: 2),
+                                            ),
+                                          );
+                                        }
                                       }
                                     },
                                   ),
@@ -100,7 +111,8 @@ class UsersScreen extends StatelessWidget {
                             builder: (BuildContext context) {
                               String selectedRole = role;
                               return StatefulBuilder(
-                                builder: (BuildContext context, StateSetter setState) {
+                                builder: (BuildContext context,
+                                    StateSetter setState) {
                                   return AlertDialog(
                                     title: Text("Update Role"),
                                     content: Column(
@@ -148,16 +160,21 @@ class UsersScreen extends StatelessWidget {
                                               await checkCollectionExists(uid);
                                           if (collectionExists) {
                                             await updateRole(uid, selectedRole);
-                                            ScaffoldMessenger.of(context).showSnackBar(
+                                            if (context.mounted)
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
                                               SnackBar(
                                                 content: Text('Role updated!'),
                                                 duration: Duration(seconds: 2),
                                               ),
                                             );
                                           } else {
-                                            ScaffoldMessenger.of(context).showSnackBar(
+                                            if (context.mounted)
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
                                               SnackBar(
-                                                content: Text('User not found!'),
+                                                content:
+                                                    Text('User not found!'),
                                                 duration: Duration(seconds: 2),
                                               ),
                                             );
@@ -174,6 +191,7 @@ class UsersScreen extends StatelessWidget {
                       ),
                     ],
                   ),
+                  onTap: () {},
                 ),
               );
             },
@@ -199,13 +217,10 @@ class UsersScreen extends StatelessWidget {
     await FirebaseFirestore.instance.collection('users').doc(uid).delete();
   }
 
-   Future<void> deleteFirebaseUser(String uid) async {
-    await FirebaseAuth.instance.currentUser?.delete();
-    await FirebaseAuth.instance.authStateChanges().first;
-    await FirebaseAuth.instance.signOut();
-  }
-
   Future<void> updateRole(String uid, String role) async {
-    await FirebaseFirestore.instance.collection('users').doc(uid).update({'Role': role});
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .update({'Role': role});
   }
 }

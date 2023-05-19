@@ -42,6 +42,7 @@ dependencies:
   flutter_otp_text_field: ^1.1.1
   flutter_staggered_animations: ^1.1.1
   fluro: ^2.0.5
+  marquee: ^1.6.0
 
 dev_dependencies:
   flutter_test:
