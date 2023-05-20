@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home:   DataView(cin: '12345678')
+        home:   ModifyData(cin: '11111111')
         );
   }
 }

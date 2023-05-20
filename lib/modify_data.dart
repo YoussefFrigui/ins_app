@@ -16,6 +16,7 @@ class _ModifyDataState extends State<ModifyData> {
   final _nutritionController = TextEditingController();
   final _santeController = TextEditingController();
   final _devertissementController = TextEditingController();
+  String _title = '';
 
   @override
   void dispose() {
@@ -27,10 +28,45 @@ class _ModifyDataState extends State<ModifyData> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    if (widget.cin.isNotEmpty) {
+      // Fetch and populate existing data
+      FirebaseFirestore.instance
+          .collection('Citoyen')
+          .doc(widget.cin)
+          .collection('data')
+          .doc('Depense')
+          .get()
+          .then((snapshot) {
+        if (snapshot.exists) {
+          final data = snapshot.data() as Map<String, dynamic>;
+          _vetementsController.text = data['vetements'] ?? '';
+          _nutritionController.text = data['nutrition'] ?? '';
+          _santeController.text = data['sante'] ?? '';
+          _devertissementController.text = data['devertissement'] ?? '';
+          setState(() {
+            _title = 'Update Expenses';
+          });
+        } else {
+          setState(() {
+            _title = 'Add Expenses';
+          });
+        }
+      });
+    } else {
+      setState(() {
+        _title = 'Add Expenses';
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add/Update Expenses"),
+        title: Text(_title),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -215,17 +251,33 @@ class _ModifyDataState extends State<ModifyData> {
                     return null;
                   },
                 ),
-                SizedBox(height: 16.0),
-                MaterialButton(
+                SizedBox(height: 24.0),
+                ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      // All fields are non-empty
-                      saveData();
+                      final expensesData = {
+                        'vetements': _vetementsController.text.trim(),
+                        'nutrition': _nutritionController.text.trim(),
+                        'sante': _santeController.text.trim(),
+                        'devertissement': _devertissementController.text.trim(),
+                      };
+
+                      FirebaseFirestore.instance
+                          .collection('Citoyen')
+                          .doc(widget.cin)
+                          .collection('data')
+                          .doc('Depense')
+                          .set(expensesData)
+                          .then((value) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Expenses saved successfully!')));
+                      }).catchError((error) {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(SnackBar(content: Text('Failed to save expenses.')));
+                      });
                     }
                   },
-                  child: Text("Save"),
-                  color: Colors.blue,
-                  textColor: Colors.white,
+                  child: Text('Save'),
                 ),
               ],
             ),
@@ -234,46 +286,5 @@ class _ModifyDataState extends State<ModifyData> {
       ),
     );
   }
-
-  void saveData() {
-    final vetements = _vetementsController.text;
-    final nutrition = _nutritionController.text;
-    final sante = _santeController.text;
-    final devertissement = _devertissementController.text;
-
-    final newData = {
-      'vetements': vetements,
-      'nutrition': nutrition,
-      'sante': sante,
-      'devertissement': devertissement,
-    };
-
-    FirebaseFirestore.instance
-        .collection('depenses')
-        .doc(widget.cin)
-        .set(newData, SetOptions(merge: true))
-        .then((value) {
-      // Data saved successfully
-      Navigator.pop(context);
-    }).catchError((error) {
-      // Error occurred while saving data
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Error'),
-            content: Text('Failed to save data. Please try again.'),
-            actions: <Widget>[
-              TextButton(
-                child: Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    });
-  }
 }
+

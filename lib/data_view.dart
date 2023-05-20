@@ -36,24 +36,28 @@ class DataView extends StatelessWidget {
           SizedBox(
             height: 20.0,
           ),
-          Expanded(
-            
+          Container(
+            height: 40,
+            width: 400,
+            child: Card(
+              color: Colors.white,
               child: Marquee(
-                startAfter: Duration(seconds: 1),
-                accelerationCurve: Curves.linear,
-                velocity: 100,
+                text:
+                    'Vous trouvez ici les tableaux de données relatives à $cin',
+                style: TextStyle(fontWeight: FontWeight.bold),
                 scrollAxis: Axis.horizontal,
-                fadingEdgeStartFraction: 0.2,
-        fadingEdgeEndFraction: 0.2,
-        blankSpace: 50,
-                text: 'Tables relatives à $cin',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
+                crossAxisAlignment: CrossAxisAlignment.start,
+                blankSpace: 20.0,
+                velocity: 30.0,
+                // pauseAfterRound: Duration(seconds: 1),
+                // startPadding: 10.0,
+                accelerationDuration: Duration(seconds: 1),
+                accelerationCurve: Curves.linear,
+                //decelerationDuration: Duration(milliseconds: 500),
+                //decelerationCurve: Curves.easeOut,
               ),
             ),
-          
+          ),
           Card(
             margin: EdgeInsets.symmetric(horizontal: 16.0),
             child: Container(
@@ -80,6 +84,8 @@ class DataView extends StatelessWidget {
                       children: documents.map((document) {
                         Map<String, dynamic> data =
                             document.data() as Map<String, dynamic>;
+
+                        IconData? iconData = getIconData(document.id);
 
                         return Container(
                           width: 175,
@@ -114,13 +120,11 @@ class DataView extends StatelessWidget {
                                   height: 120.0,
                                   margin: EdgeInsets.all(12.0),
                                   decoration: BoxDecoration(
-                                    //add image 
-                                    
                                     color: Color.fromARGB(255, 94, 6, 247),
                                     borderRadius: BorderRadius.circular(8.0),
                                   ),
                                   child: Icon(
-                                    Icons.money,
+                                    iconData,
                                     color: Colors.white,
                                   ),
                                 ),
@@ -149,5 +153,17 @@ class DataView extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  IconData? getIconData(String documentId) {
+    switch (documentId) {
+      case 'Depense':
+        return Icons.attach_money;
+      case 'General info':
+        return Icons.info;
+      // Add more cases for other icons as needed
+      default:
+        return null;
+    }
   }
 }
