@@ -256,10 +256,10 @@ class _ModifyDataState extends State<ModifyData> {
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       final expensesData = {
-                        'vetements': _vetementsController.text.trim(),
-                        'nutrition': _nutritionController.text.trim(),
-                        'sante': _santeController.text.trim(),
-                        'devertissement': _devertissementController.text.trim(),
+                        'vetements': double.parse( _vetementsController.text.trim()),
+                        'nutrition': double.parse(_nutritionController.text.trim()),
+                        'sante': double.parse(_santeController.text.trim()),
+                        'devertissement': double.parse(_devertissementController.text.trim()),
                       };
 
                       FirebaseFirestore.instance

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ins_app/AuthPage.dart';
 
 class PasswordReset extends StatefulWidget {
@@ -10,6 +11,7 @@ class PasswordReset extends StatefulWidget {
 class _PasswordResetState extends State<PasswordReset> {
   final TextEditingController _emailController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   String _errorMessage = "";
 
   @override
@@ -27,6 +29,19 @@ class _PasswordResetState extends State<PasswordReset> {
       return false;
     }
 
+    // Check if email exists in Firestore "users" collection
+    final querySnapshot = await _firestore
+        .collection('users')
+        .where('email', isEqualTo: email)
+        .limit(1)
+        .get();
+    if (querySnapshot.docs.isEmpty) {
+      setState(() {
+        _errorMessage = "User with this email doesn't exist.";
+      });
+      return false;
+    }
+
     try {
       await _auth.sendPasswordResetEmail(email: email);
       ScaffoldMessenger.of(context).showSnackBar(
@@ -37,15 +52,22 @@ class _PasswordResetState extends State<PasswordReset> {
       );
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        setState(() {
-          _errorMessage = "User with this email doesn't exist.";
-        });
-      } else {
-        setState(() {
-          _errorMessage = "Error: ${e.message}";
-        });
+      String errorMessage = "";
+      switch (e.code) {
+        case 'user-not-found':
+          errorMessage = "User with this email doesn't exist.";
+          break;
+        case 'invalid-email':
+          errorMessage = "Invalid email format.";
+          break;
+        default:
+          errorMessage = "Failed to reset password. Please try again later.";
+          break;
       }
+      setState(() {
+        _errorMessage = errorMessage;
+      });
+      return false;
     }
     bool resetSuccessful = true; // set to true if successful, false otherwise
     return resetSuccessful;
@@ -192,8 +214,9 @@ class _PasswordResetState extends State<PasswordReset> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            AuthenticationPage()),
+                                      builder: (context) =>
+                                          AuthenticationPage(),
+                                    ),
                                   );
                                 },
                               ),
@@ -207,8 +230,9 @@ class _PasswordResetState extends State<PasswordReset> {
                         builder: (BuildContext context) {
                           return AlertDialog(
                             title: Text("Error"),
-                            content: Text(
-                                "Failed to reset password. Please try again later."),
+                            content: Text(_errorMessage.isNotEmpty
+                                ? _errorMessage
+                                : "Failed to reset password. Please try again later."),
                             actions: [
                               TextButton(
                                 child: Text("OK"),
