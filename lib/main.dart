@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:ins_app/AuthPage.dart';
+import 'package:ins_app/Dashboard.dart';
 import 'package:ins_app/Signup.dart';
 import 'package:ins_app/add_data.dart';
 import 'package:ins_app/cin_collector.dart';
@@ -28,13 +29,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-        title: 'My App',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: PasswordReset()
-  
-
-        );
+      title: 'My App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: DashBord(name: "name", userEmail: "userEmail"),
+      //are you working ?
+      
+    );
   }
 }

@@ -23,7 +23,7 @@ class _SignUpState extends State<SignUp> {
         title: Text('Sign Up'),
       ),
       body: SafeArea(
-        child: Container(
+        child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -113,7 +113,8 @@ class _SignUpState extends State<SignUp> {
       // Store user data in Firestore collection "users"
       await FirebaseFirestore.instance.collection('users').doc(user!.uid).set({
         'email': _emailController.text,
-        'Name' : _firstNameController.text + ' ' + _lastNameController.text,
+        'firstName': _firstNameController.text,
+        'lastName': _lastNameController.text,
         'lastLogin': DateTime.now(),
       });
 

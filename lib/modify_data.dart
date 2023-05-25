@@ -16,6 +16,7 @@ class _ModifyDataState extends State<ModifyData> {
   final _nutritionController = TextEditingController();
   final _santeController = TextEditingController();
   final _devertissementController = TextEditingController();
+  final _educationController = TextEditingController();
   String _title = '';
 
   @override
@@ -24,6 +25,8 @@ class _ModifyDataState extends State<ModifyData> {
     _nutritionController.dispose();
     _santeController.dispose();
     _devertissementController.dispose();
+    _educationController.dispose();
+
     super.dispose();
   }
 
@@ -46,6 +49,7 @@ class _ModifyDataState extends State<ModifyData> {
           _nutritionController.text = data['nutrition'] ?? '';
           _santeController.text = data['sante'] ?? '';
           _devertissementController.text = data['devertissement'] ?? '';
+          _educationController.text= data['education'] ?? '';
           setState(() {
             _title = 'Update Expenses';
           });
@@ -251,6 +255,51 @@ class _ModifyDataState extends State<ModifyData> {
                     return null;
                   },
                 ),
+                SizedBox(height: 16.0),
+                //formfield for education
+                TextFormField(
+                  controller: _educationController,
+                  obscureText: false,
+                  textAlign: TextAlign.start,
+                  maxLines: 1,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontStyle: FontStyle.normal,
+                    fontSize: 16,
+                    color: Color(0xff000000),
+                  ),
+                  decoration: InputDecoration(
+                    disabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(4.0),
+                      borderSide: BorderSide(color: Color(0xff9e9e9e), width: 1),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(4.0),
+                      borderSide: BorderSide(color: Color(0xff9e9e9e), width: 1),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(4.0),
+                      borderSide: BorderSide(color: Color(0xff9e9e9e), width: 1),
+                    ),
+                    labelText: "Education",
+                    labelStyle: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontStyle: FontStyle.normal,
+                      fontSize: 16,
+                      color: Color(0xff9e9e9e),
+                    ),
+                    filled: true,
+                    fillColor: Color(0x00f2f2f3),
+                    isDense: false,
+                    contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  ),
+                  validator: (value) {
+                    if (value?.isEmpty ?? true) {
+                      return 'Please enter education';
+                    }
+                    return null;
+                  },
+                ),
                 SizedBox(height: 24.0),
                 ElevatedButton(
                   onPressed: () {
@@ -260,6 +309,7 @@ class _ModifyDataState extends State<ModifyData> {
                         'nutrition': double.parse(_nutritionController.text.trim()),
                         'sante': double.parse(_santeController.text.trim()),
                         'devertissement': double.parse(_devertissementController.text.trim()),
+                        'education': double.parse(_educationController.text.trim()),
                       };
 
                       FirebaseFirestore.instance

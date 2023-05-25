@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ins_app/add_data.dart';
+import 'package:ins_app/cin_collector.dart';
 import 'package:ins_app/create_data.dart';
 import 'package:ins_app/homepage.dart';
 import 'package:ins_app/Signup.dart';
@@ -50,7 +51,7 @@ Future<void> _authenticate() async {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => HomePage(),
+              builder: (BuildContext context) => CollectionScreen(),
             ),
           );
         } else if (userRole == 'Admin') {
